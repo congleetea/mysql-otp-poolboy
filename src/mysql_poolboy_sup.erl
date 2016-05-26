@@ -25,12 +25,9 @@ start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 init([]) ->
-    Pools = application:get_all_env(mysql_poolboy),
-    Pools1 = proplists:delete(included_applications, Pools),
-    PoolSpec = lists:map(
-        fun ({PoolName, {PoolArgs, MysqlArgs}}) ->
-            mysql_poolboy:child_spec(PoolName, PoolArgs, MysqlArgs)
-        end,
-        Pools1
-    ),
+    {ok, Pools} = application:get_env(mysql_poolboy, pools),
+    {ok, GlobalOrLocal} = application:get_env(mysql_poolboy, global_or_local),
+    PoolSpec = lists:map(fun({PoolName, SizeArgs, WorkerArgs}) ->
+                                 mysql_poolboy:child_spec({GlobalOrLocal, PoolName}, SizeArgs, WorkerArgs)
+                         end, Pools),
     {ok, {{one_for_one, 10, 10}, PoolSpec}}.

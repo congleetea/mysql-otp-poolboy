@@ -15,10 +15,23 @@
 %%
 %% You should have received a copy of the GNU Lesser General Public License
 %% along with this program. If not, see <https://www.gnu.org/licenses/>.
+
 {application, mysql_poolboy, [
     {description, "MySQL/OTP + Poolboy"},
     {vsn, "0.1.6"},
     {modules, []},
     {mod, {mysql_poolboy_app, []}},
-    {applications, [mysql, poolboy]}
+    {applications, [mysql, poolboy]},
+    {env, [
+          {global_or_local, global},
+          {pools, [
+                   {pool1, [{size, 100}, {max_overflow, 150}],
+                              [{host, "localhost"},
+                               {port, 3306},
+                               {user, "username"},
+                               {password, "password"},
+                               {database, "db"}]}
+                 ]}
+        ]}
+
 ]}.
