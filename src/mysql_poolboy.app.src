@@ -23,15 +23,14 @@
     {mod, {mysql_poolboy_app, []}},
     {applications, [mysql, poolboy]},
     {env, [
-          {global_or_local, global},
-          {pools, [
+          %%{global_or_local, global},
+          %%{pools, [
                    %% {pool1, [{size, 100}, {max_overflow, 150}],
                    %%            [{host, "localhost"},
                    %%             {port, 3306},
                    %%             {user, "username"},
                    %%             {password, "password"},
                    %%             {database, "db"}]}
-                 ]}
+                 %%]}
         ]}
-
 ]}.
